@@ -103,28 +103,28 @@ int main(void) {
 	srand(time(NULL));
 	for (int clock = 0; clock < minutes; clock++) {
 		// 대기자 수는 큐의 요소 개수를 반환해주는 get_count 함수를 호출해서 출력한다. queue에 들어있는 요소의 개수가 대기자 수이다.
-		printf("현재시각=%d    [%d명 대기]\n", clock, get_count(&queue));
+		printf("현재 시각=%d    [%d명 대기]\n", clock, get_count(&queue));
 		if ((rand() % 10) < 3) {
 			element customer;
 			customer.id = total_customers++;
 			customer.arrival_time = clock;
 			customer.service_time = rand() % 3 + 1;
 			enqueue(&queue, customer);
-			printf("고객 %d이 %d분에 들어옵니다. 업무처리시간= %d분\n",
+			printf("고객 %d이 %d분에 들어옵니다. 업무 처리 시간= %d분\n",
 				customer.id, customer.arrival_time, customer.service_time);
 		}
 		if (service_time > 0) {
-			printf("고객 %d 업무처리중입니다. \n", service_customer);
+			printf("고객 %d 업무 처리중입니다. \n", service_customer);
 			service_time--;
 		}
 		else {
 			if (!is_empty(&queue)) {
 				element customer = dequeue(&queue);
-				customer.start_time = clock; // 현재 업무를 시작하므로 현재시각을 업무시작시간에 넣어준다.
+				customer.start_time = clock; // 현재 업무를 시작하므로 현재 시각을 업무 시작 시간에 넣어준다.
 				enqueue(&log, customer); // 업무 시작 시간까지 포함한 customer의 정보를 log 큐에 enqueue한다.
 				service_customer = customer.id;
 				service_time = customer.service_time;
-				printf("고객 %d이 %d분에 업무를 시작합니다. 대기시간은 %d분이었습니다.\n",
+				printf("고객 %d이 %d분에 업무를 시작합니다. 대기 시간은 %d분이었습니다.\n",
 					customer.id, clock, clock - customer.arrival_time);
 				total_wait += clock - customer.arrival_time;
 			}
@@ -139,13 +139,13 @@ int main(void) {
 		element customer = dequeue(&log);
 		printf("[%d]  %d분 도착, [%d분 대기] %d ~ %d분\n", customer.id, customer.arrival_time, customer.start_time - customer.arrival_time, customer.start_time, customer.start_time + customer.service_time);
 	} // 대기시간은 업무 시작 시간에서 은행 도착시간을 뺀 값이다. 업무 종료 시간은 업무 시작 시간에 업무 처리 시간을 더해준 값이다.
-	printf("대기고객 %d명\n", get_count(&queue)); // queue에 남아있는 요소의 개수를 출력한다. 60분이 끝나고도 업무처리를 못받은 사람은 queue에 남아있을 것이다.
+	printf("대기 고객 %d명\n", get_count(&queue)); // queue에 남아있는 요소의 개수를 출력한다. 60분이 끝나고도 업무 처리를 못받은 사람은 queue에 남아있을 것이다.
 	while (1) { // 업무처리를 받지 못한 사람의 정보를 출력하기 위한 while문
 		if (is_empty(&queue)) { // queue 큐가 비었으면
 			break; // while문에서 나간다.
 		}
 		element customer = dequeue(&queue); // customer라는 객체에 queue에서 dequeue한 데이터를 넣는다.
-		printf("[%d]  %d분 도착, [%d분 대기] 작업시간 %d분\n", customer.id, customer.arrival_time, 60 - customer.arrival_time, customer.service_time);
+		printf("[%d]  %d분 도착, [%d분 대기] 작업 시간 %d분\n", customer.id, customer.arrival_time, 60 - customer.arrival_time, customer.service_time);
 	} // 60분에 은행업무가 종료되었으므로 대기 시간은 60 - 고객이 도착한 시간이다. 
 	return 0;
 }
