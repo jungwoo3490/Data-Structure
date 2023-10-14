@@ -11,13 +11,13 @@
 typedef struct {
 	int x;
 	int y;
-}element;
+} element;
 
 typedef struct {
 	element* data;
 	int capacity;
 	int top;
-}StackType;
+} StackType;
 
 int neighbor(element next, element here);
 int maze_size = 0;
